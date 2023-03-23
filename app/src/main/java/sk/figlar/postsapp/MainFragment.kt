@@ -65,6 +65,8 @@ class MainFragment : Fragment() {
         setupAddPostButton()
         setupGetApiPostsButton()
         setupDeleteAllPostsButton()
+        setupSearchByUserIdButton()
+        setupSearchByPostIdButton()
 
         val deleteCallback: ((postId: Int) -> Unit) = { postId -> deletePost(postId) }
         val editCallback: ((postId: Int) -> Unit) = { postId -> editPost(postId) }
@@ -81,12 +83,14 @@ class MainFragment : Fragment() {
 
     private fun setupAddPostButton() {
         binding.btnAddPost.setOnClickListener {
+            removeSearchInputs()
             findNavController().navigate(MainFragmentDirections.actionMainFragmentToAddPostFragment())
         }
     }
 
     private fun setupGetApiPostsButton() {
         binding.btnGetApiPosts.setOnClickListener {
+            removeSearchInputs()
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.getApiPosts()
             }
@@ -95,10 +99,37 @@ class MainFragment : Fragment() {
 
     private fun setupDeleteAllPostsButton() {
         binding.btnDeletePosts.setOnClickListener {
+            removeSearchInputs()
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.deleteAllPosts()
             }
         }
+    }
+
+    private fun setupSearchByUserIdButton() {
+        binding.btnSearchByUserId.setOnClickListener {
+            viewModel.mUserId = binding.etSearchByUserId.text.toString().toIntOrNull()
+            binding.etSearchByPostId.setText("")
+            viewModel.mPostId = null
+            viewModel.refreshPosts()
+        }
+    }
+
+    private fun setupSearchByPostIdButton() {
+        binding.btnSearchByPostId.setOnClickListener {
+            viewModel.mPostId = binding.etSearchByPostId.text.toString().toIntOrNull()
+            binding.etSearchByUserId.setText("")
+            viewModel.mUserId = null
+            viewModel.refreshPosts()
+        }
+    }
+
+    private fun removeSearchInputs() {
+        binding.etSearchByUserId.setText("")
+        binding.etSearchByPostId.setText("")
+        viewModel.mUserId = null
+        viewModel.mPostId = null
+        viewModel.refreshPosts()
     }
 
     private fun setupMenu() {

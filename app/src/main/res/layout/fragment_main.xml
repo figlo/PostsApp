@@ -45,13 +45,62 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_add_post" />
 
+    <LinearLayout
+        android:id="@+id/ll_search_by_user_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_delete_posts">
+
+    <EditText
+        android:id="@+id/et_search_by_user_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="100dp"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/btn_search_by_user_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_by_user_id" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_search_by_post_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_search_by_user_id">
+
+        <EditText
+            android:id="@+id/et_search_by_post_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:width="100dp"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/btn_search_by_post_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_by_post_id" />
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_posts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="150dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_get_api_posts" />
+        app:layout_constraintTop_toBottomOf="@id/ll_search_by_post_id" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

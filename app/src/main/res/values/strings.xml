@@ -7,4 +7,6 @@
     <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="add_post">Add Post</string>
+    <string name="search_by_user_id">Search by user id</string>
+    <string name="search_by_post_id">Search by post id</string>
 </resources>

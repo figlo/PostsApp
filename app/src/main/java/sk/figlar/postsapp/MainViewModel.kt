@@ -19,10 +19,24 @@ class MainViewModel @Inject constructor(
     val postsFlow: StateFlow<List<PostDomainModel>>
         get() = _postsFlow.asStateFlow()
 
+    var mUserId: Int? = null
+    var mPostId: Int? = null
+
     init {
+        refreshPosts()
+    }
+
+    fun refreshPosts() {
         viewModelScope.launch {
             postRepository.getPostsFlow().collect { postDbModelList ->
-                _postsFlow.value = postDbModelList.map { it.toDomainModel() }
+                val posts = postDbModelList.map { it.toDomainModel() }
+                if (mUserId != null) {
+                    _postsFlow.value = posts.filter { it.userId == mUserId }
+                } else if(mPostId != null) {
+                    _postsFlow.value = posts.filter { it.id == mPostId }
+                } else {
+                    _postsFlow.value = posts
+                }
             }
         }
     }
