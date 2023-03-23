@@ -13,13 +13,16 @@ interface PostDao {
     fun getPostByUserIdFlow(): Flow<List<PostDbModel>>
 
     @Query("SELECT * FROM posts WHERE id = :id")
-    suspend fun get(id: Int): PostDbModel?
+    suspend fun getPost(id: Int): PostDbModel?
 
     @Insert
     suspend fun insert(post: PostDbModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(apods: List<PostDbModel>)
+    suspend fun insertAll(posts: List<PostDbModel>)
+
+    @Update
+    suspend fun update(post: PostDbModel)
 
     @Delete
     suspend fun delete(post: PostDbModel)

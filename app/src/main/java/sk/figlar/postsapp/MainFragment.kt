@@ -65,13 +65,13 @@ class MainFragment : Fragment() {
         setupGetApiPostsButton()
         setupDeleteAllPostsButton()
 
+        val deleteCallback: ((postId: Int) -> Unit) = { postId -> deletePost(postId) }
+        val editCallback: ((postId: Int) -> Unit) = { postId -> editPost(postId) }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.postsFlow.collect { posts ->
-                    val adapter = PostAdapter(posts) { postId ->
-//                        findNavController().navigate(ApodGalleryFragmentDirections.actionApodGalleryFragmentToApodDetailFragment(apodId))
-                        deletePost(postId)
-                    }
+                    val adapter = PostAdapter(posts, deleteCallback, editCallback)
                     binding.rvPosts.adapter = adapter
                 }
             }
@@ -104,6 +104,10 @@ class MainFragment : Fragment() {
                 return NavigationUI.onNavDestinationSelected(menuItem, findNavController())
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun editPost(id: Int) {
+        findNavController().navigate(MainFragmentDirections.actionMainFragmentToPostFragment(id))
     }
 
     private fun deletePost(id: Int) {

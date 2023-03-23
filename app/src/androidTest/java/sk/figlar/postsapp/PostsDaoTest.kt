@@ -41,10 +41,10 @@ class PostsDaoTest {
         dao.insert(post)
         assertEquals(1, dao.count())
 
-        val loadedPost = dao.get(1)                     // autoincrement primary key starts from 1
+        val loadedPost = dao.getPost(1)                     // autoincrement primary key starts from 1
         assertEquals(0, loadedPost?.userId)
 
-        dao.clear()
+        dao.deleteAllPosts()
         assertEquals(0, dao.count())
     }
 }

@@ -1,6 +1,5 @@
 package sk.figlar.postsapp
 
-import android.hardware.biometrics.BiometricManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,16 +9,19 @@ class PostViewHolder(
     private val binding: PostItemBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(postDomainModel: PostDomainModel, onDeletePost: (postId: Int) -> Unit) {
+    fun bind(postDomainModel: PostDomainModel, onDeletePost: (postId: Int) -> Unit, onEditPost: (postId: Int) -> Unit) {
         with(binding) {
             postId.text = "Id: " + postDomainModel.id.toString()
             postUserId.text = "UserId: " + postDomainModel.userId.toString()
             postTitle.text = "Title: " + postDomainModel.title.toString()
             postBody.text = "Body: " + postDomainModel.body.toString()
 
-//            root.setOnClickListener { onDeletePost(postDomainModel.id) }
             btnPostDelete.setOnClickListener {
                 onDeletePost(postDomainModel.id)
+            }
+
+            btnPostEdit.setOnClickListener {
+                onEditPost(postDomainModel.id)
             }
         }
     }
@@ -28,6 +30,7 @@ class PostViewHolder(
 class PostAdapter(
     private val posts: List<PostDomainModel>,
     private val onDeletePost: (postId: Int) -> Unit,
+    private val onEditPost: (postId: Int) -> Unit,
 ) : RecyclerView.Adapter<PostViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -40,7 +43,7 @@ class PostAdapter(
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val item = posts[position]
-        holder.bind(item, onDeletePost)
+        holder.bind(item, onDeletePost, onEditPost)
     }
 
     override fun getItemCount() = posts.size
