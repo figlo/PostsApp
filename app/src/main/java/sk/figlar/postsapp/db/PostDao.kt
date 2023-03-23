@@ -16,7 +16,7 @@ interface PostDao {
     suspend fun getPost(id: Int): PostDbModel?
 
     @Insert
-    suspend fun insert(post: PostDbModel)
+    suspend fun addPost(post: PostDbModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(posts: List<PostDbModel>)

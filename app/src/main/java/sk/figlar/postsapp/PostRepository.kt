@@ -48,7 +48,15 @@ class PostRepository @Inject constructor(
         try {
             dao.update(postDbModel)
         } catch (ex: Exception) {
-            Log.e("Repository", "Failed to update post($postDbModel.id): $ex")
+            Log.e("Repository", "Failed to update post(${postDbModel.id}): $ex")
+        }
+    }
+
+    suspend fun addPost(postDbModel: PostDbModel) {
+        try {
+            dao.addPost(postDbModel)
+        } catch (ex: Exception) {
+            Log.e("Repository", "Failed to add post(${postDbModel.id}): $ex")
         }
     }
 
@@ -56,13 +64,13 @@ class PostRepository @Inject constructor(
         try {
             dao.deletePost(id)
         } catch (ex: Exception) {
-            Log.e("Repository", "Failed to delete post($id): $ex")
+            Log.e("Repository", "Failed to delete post(id: $id): $ex")
         }
     }
 
     suspend fun getPost(id: Int): PostDomainModel {
 //        try {
-        return dao.getPost(id)!!.toDomainModel()
+            return dao.getPost(id)!!.toDomainModel()
 //        } catch (ex: Exception) {
 //            Log.e("Repository", "Failed to get post($id): $ex")
 //        }

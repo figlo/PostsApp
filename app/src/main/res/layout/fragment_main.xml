@@ -19,12 +19,21 @@
         app:titleTextAppearance="@style/Toolbar.TitleText" />
 
     <Button
+        android:id="@+id/btn_add_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_post"
+        app:layout_constraintEnd_toStartOf="@id/btn_get_api_posts"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <Button
         android:id="@+id/btn_get_api_posts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/get_api_posts"
-        app:layout_constraintEnd_toStartOf="@id/btn_delete_posts"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_add_post"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <Button
@@ -33,14 +42,14 @@
         android:layout_height="wrap_content"
         android:text="@string/delete_all"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_get_api_posts"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_add_post" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_posts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="150dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_get_api_posts" />

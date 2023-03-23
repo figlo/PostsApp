@@ -62,6 +62,7 @@ class MainFragment : Fragment() {
 
         setupMenu()
 
+        setupAddPostButton()
         setupGetApiPostsButton()
         setupDeleteAllPostsButton()
 
@@ -75,6 +76,12 @@ class MainFragment : Fragment() {
                     binding.rvPosts.adapter = adapter
                 }
             }
+        }
+    }
+
+    private fun setupAddPostButton() {
+        binding.btnAddPost.setOnClickListener {
+            findNavController().navigate(MainFragmentDirections.actionMainFragmentToAddPostFragment())
         }
     }
 
