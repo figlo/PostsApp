@@ -1,9 +1,6 @@
 package sk.figlar.postsapp.db
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,6 +18,9 @@ interface PostDao {
     @Insert
     suspend fun insert(post: PostDbModel)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(apods: List<PostDbModel>)
+
     @Delete
     suspend fun delete(post: PostDbModel)
 
@@ -28,7 +28,7 @@ interface PostDao {
     suspend fun deleteById(id: Int)
 
     @Query("DELETE FROM posts")
-    suspend fun clear()
+    suspend fun deleteAllPosts()
 
     @Query("SELECT COUNT(*) FROM posts")
     suspend fun count(): Long

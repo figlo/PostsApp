@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Toolbar -->
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">@dimen/toolbar_text_size</item>
+    </style>
+
+    <!-- Popup menu background color -->
+    <style name="PopupMenuStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">@color/colorSecondary</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+</resources>
