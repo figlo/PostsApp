@@ -15,10 +15,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import sk.figlar.postsapp.databinding.FragmentMainBinding
+
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
@@ -37,7 +39,13 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        binding.rvPosts.layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
+        binding.rvPosts.layoutManager = layoutManager
+        val mDividerItemDecoration = DividerItemDecoration(
+            context,
+            layoutManager.orientation
+        )
+        binding.rvPosts.addItemDecoration(mDividerItemDecoration)
         return binding.root
     }
 
@@ -59,9 +67,10 @@ class MainFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.postsFlow.collect { apods ->
-                    val adapter = PostAdapter(apods) { postId ->
+                viewModel.postsFlow.collect { posts ->
+                    val adapter = PostAdapter(posts) { postId ->
 //                        findNavController().navigate(ApodGalleryFragmentDirections.actionApodGalleryFragmentToApodDetailFragment(apodId))
+                        deletePost(postId)
                     }
                     binding.rvPosts.adapter = adapter
                 }
@@ -95,6 +104,12 @@ class MainFragment : Fragment() {
                 return NavigationUI.onNavDestinationSelected(menuItem, findNavController())
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun deletePost(id: Int) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.deletePost(id)
+        }
     }
 
     override fun onDestroyView() {

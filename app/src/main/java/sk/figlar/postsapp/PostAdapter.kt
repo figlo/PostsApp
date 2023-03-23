@@ -10,21 +10,24 @@ class PostViewHolder(
     private val binding: PostItemBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(postDomainModel: PostDomainModel, onItemClicked: (postId: Int) -> Unit) {
+    fun bind(postDomainModel: PostDomainModel, onDeletePost: (postId: Int) -> Unit) {
         with(binding) {
             postId.text = "Id: " + postDomainModel.id.toString()
             postUserId.text = "UserId: " + postDomainModel.userId.toString()
             postTitle.text = "Title: " + postDomainModel.title.toString()
             postBody.text = "Body: " + postDomainModel.body.toString()
 
-//            root.setOnClickListener { onItemClicked(postDomainModel.id) }
+//            root.setOnClickListener { onDeletePost(postDomainModel.id) }
+            btnPostDelete.setOnClickListener {
+                onDeletePost(postDomainModel.id)
+            }
         }
     }
 }
 
 class PostAdapter(
     private val posts: List<PostDomainModel>,
-    private val onItemClicked: (postId: Int) -> Unit,
+    private val onDeletePost: (postId: Int) -> Unit,
 ) : RecyclerView.Adapter<PostViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -37,7 +40,7 @@ class PostAdapter(
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val item = posts[position]
-        holder.bind(item, onItemClicked)
+        holder.bind(item, onDeletePost)
     }
 
     override fun getItemCount() = posts.size

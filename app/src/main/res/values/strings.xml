@@ -3,4 +3,6 @@
     <string name="app_name_label">Posts App</string>
     <string name="get_api_posts">Get API Posts</string>
     <string name="delete_all">Delete all</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

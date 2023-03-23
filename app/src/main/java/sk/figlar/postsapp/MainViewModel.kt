@@ -34,4 +34,8 @@ class MainViewModel @Inject constructor(
     suspend fun deleteAllPosts() {
         postRepository.deleteAllPosts()
     }
+
+    suspend fun deletePost(id: Int) {
+        postRepository.deletePost(id)
+    }
 }

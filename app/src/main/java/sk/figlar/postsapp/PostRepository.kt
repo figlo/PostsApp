@@ -39,4 +39,12 @@ class PostRepository @Inject constructor(
             Log.e("Repository", "Failed to delete all posts: $ex")
         }
     }
+
+    suspend fun deletePost(id: Int) {
+        try {
+            dao.deletePost(id)
+        } catch (ex: Exception) {
+            Log.e("Repository", "Failed to delete post($id): $ex")
+        }
+    }
 }
