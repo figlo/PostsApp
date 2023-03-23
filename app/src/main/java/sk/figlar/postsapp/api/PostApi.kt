@@ -7,6 +7,10 @@ interface PostApi {
     @GET(
         "/posts"
     )
-//    suspend fun getPostApiModels(@Query("start_date") startDate: String): List<ApodApiModel>
     suspend fun getPostApiModels(): List<PostApiModel>
+
+    @GET(
+        "/users"
+    )
+    suspend fun getUserApiModels(): List<UserApiModel>
 }

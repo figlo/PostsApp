@@ -1,12 +1,10 @@
 package sk.figlar.postsapp
 
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import sk.figlar.postsapp.api.PostApi
+import sk.figlar.postsapp.api.UserApiModel
 import sk.figlar.postsapp.api.toDbModel
 import sk.figlar.postsapp.db.PostDao
 import sk.figlar.postsapp.db.PostDbModel
@@ -33,6 +31,22 @@ class PostRepository @Inject constructor(
             Log.d("Repository", "Gettting API posts, size: ${newApiPosts.size}")
         } catch (ex: Exception) {
             Log.e("Repository", "Failed to fetch posts: $ex")
+        }
+    }
+
+    suspend fun validateUser(userId: Int): Boolean {
+        val users = getApiUsers()
+        return users?.any { it.id == userId } ?: false
+    }
+
+    private suspend fun getApiUsers(): List<UserApiModel>? {
+        return try {
+            val apiUsers = postApi.getUserApiModels()
+            Log.d("Repository", "Gettting API users, size: ${apiUsers.size}")
+            apiUsers
+        } catch (ex: Exception) {
+            Log.e("Repository", "Failed to fetch users: $ex")
+            null
         }
     }
 
@@ -70,7 +84,7 @@ class PostRepository @Inject constructor(
 
     suspend fun getPost(id: Int): PostDomainModel {
 //        try {
-            return dao.getPost(id)!!.toDomainModel()
+        return dao.getPost(id)!!.toDomainModel()
 //        } catch (ex: Exception) {
 //            Log.e("Repository", "Failed to get post($id): $ex")
 //        }

@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditPostViewModel @Inject constructor(
-    private val postRepository: PostRepository,
+    private val repository: PostRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -26,14 +26,14 @@ class EditPostViewModel @Inject constructor(
     }
 
     suspend fun getPost(): PostDomainModel {
-        return postRepository.getPost(id)
+        return repository.getPost(id)
     }
 
     suspend fun updatePost(post: PostDbModel) {
-        postRepository.updatePost(post)
+        repository.updatePost(post)
     }
 
     suspend fun deletePost(id: Int) {
-        postRepository.deletePost(id)
+        repository.deletePost(id)
     }
 }

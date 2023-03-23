@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,6 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import sk.figlar.postsapp.databinding.FragmentAddPostBinding
 import sk.figlar.postsapp.db.PostDbModel
 
@@ -80,7 +82,16 @@ class AddPostFragment : Fragment() {
 
     private fun isValidUserId(userIdString: String): Boolean {
         val userId = userIdString.toIntOrNull()
-        return userId != null
+
+        return if (userId == null)
+            false
+        else {
+            var isValid = false
+            runBlocking {
+                isValid = viewModel.validateUser(userId)
+            }
+            isValid
+        }
     }
 
     override fun onDestroyView() {
