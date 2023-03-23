@@ -2,7 +2,6 @@ package sk.figlar.postsapp.api
 
 import com.squareup.moshi.JsonClass
 import sk.figlar.postsapp.db.PostDbModel
-import kotlin.text.Typography.copyright
 
 @JsonClass(generateAdapter = true)
 data class PostApiModel(
@@ -21,4 +20,13 @@ fun List<PostApiModel>.toDbModel(): List<PostDbModel> {
             body = it.body,
         )
     }
+}
+
+fun PostApiModel.toDbModel(): PostDbModel {
+    return PostDbModel(
+        id = id,
+        userId = userId,
+        title = title,
+        body = body,
+    )
 }

@@ -83,14 +83,14 @@ class MainFragment : Fragment() {
 
     private fun setupAddPostButton() {
         binding.btnAddPost.setOnClickListener {
-            removeSearchInputs()
+            deleteSearchInputs()
             findNavController().navigate(MainFragmentDirections.actionMainFragmentToAddPostFragment())
         }
     }
 
     private fun setupGetApiPostsButton() {
         binding.btnGetApiPosts.setOnClickListener {
-            removeSearchInputs()
+            deleteSearchInputs()
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.getApiPosts()
             }
@@ -99,7 +99,7 @@ class MainFragment : Fragment() {
 
     private fun setupDeleteAllPostsButton() {
         binding.btnDeletePosts.setOnClickListener {
-            removeSearchInputs()
+            deleteSearchInputs()
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.deleteAllPosts()
             }
@@ -124,7 +124,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun removeSearchInputs() {
+    private fun deleteSearchInputs() {
         binding.etSearchByUserId.setText("")
         binding.etSearchByPostId.setText("")
         viewModel.mUserId = null
@@ -149,6 +149,7 @@ class MainFragment : Fragment() {
     }
 
     private fun deletePost(id: Int) {
+        deleteSearchInputs()
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.deletePost(id)
         }

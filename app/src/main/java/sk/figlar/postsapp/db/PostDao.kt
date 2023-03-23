@@ -15,7 +15,7 @@ interface PostDao {
     @Query("SELECT * FROM posts WHERE id = :id")
     suspend fun getPost(id: Int): PostDbModel?
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPost(post: PostDbModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

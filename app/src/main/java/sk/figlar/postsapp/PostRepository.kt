@@ -20,7 +20,16 @@ class PostRepository @Inject constructor(
 ) {
     fun getPostsFlow(): Flow<List<PostDbModel>> = dao.getPostsFlow()
 
-//    suspend fun getPost(id: Int): PostDomainModel? = dao.get(id)?.toDomainModel()
+    suspend fun getPostFromApi(id: Int) {
+        // todo add validation
+        val response = postApi.getPost(id)
+        if (response.isSuccessful) {
+            val postApiModel = response.body()
+            if (postApiModel != null) {
+                dao.addPost(postApiModel.toDbModel())
+            }
+        }
+    }
 
     suspend fun getApiPosts() {
         try {
@@ -28,10 +37,13 @@ class PostRepository @Inject constructor(
             val dbPosts = dao.getPostsFlow().first()
             val newApiPosts = apiPosts - dbPosts.toApiModel().toSet()
             dao.insertAll(newApiPosts.toDbModel())
-            Log.d("Repository", "Gettting API posts, size: ${newApiPosts.size}")
         } catch (ex: Exception) {
             Log.e("Repository", "Failed to fetch posts: $ex")
         }
+    }
+
+    suspend fun isPostInDb(postId: Int): Boolean {
+        return dao.getPost(postId) != null
     }
 
     suspend fun validateUser(userId: Int): Boolean {
@@ -41,9 +53,7 @@ class PostRepository @Inject constructor(
 
     private suspend fun getApiUsers(): List<UserApiModel>? {
         return try {
-            val apiUsers = postApi.getUserApiModels()
-            Log.d("Repository", "Gettting API users, size: ${apiUsers.size}")
-            apiUsers
+            postApi.getUserApiModels()
         } catch (ex: Exception) {
             Log.e("Repository", "Failed to fetch users: $ex")
             null

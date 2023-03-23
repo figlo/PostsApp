@@ -33,6 +33,9 @@ class MainViewModel @Inject constructor(
                 if (mUserId != null) {
                     _postsFlow.value = posts.filter { it.userId == mUserId }
                 } else if(mPostId != null) {
+                    if (!postRepository.isPostInDb(mPostId!!)) {
+                        postRepository.getPostFromApi(mPostId!!)
+                    }
                     _postsFlow.value = posts.filter { it.id == mPostId }
                 } else {
                     _postsFlow.value = posts
