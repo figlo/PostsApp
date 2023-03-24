@@ -16,6 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/PopupMenuStyle"
+        app:title="Edit Post"
         app:titleTextAppearance="@style/Toolbar.TitleText" />
 
     <LinearLayout
@@ -93,9 +94,9 @@
 
         <Button
             android:id="@+id/btn_save"
-            android:text="@string/save"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/save" />
 
     </LinearLayout>
 

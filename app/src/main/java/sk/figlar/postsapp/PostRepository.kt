@@ -21,24 +21,27 @@ class PostRepository @Inject constructor(
     fun getPostsFlow(): Flow<List<PostDbModel>> = dao.getPostsFlow()
 
     suspend fun getPostFromApi(id: Int) {
-        // todo add validation
-        val response = postApi.getPost(id)
-        if (response.isSuccessful) {
-            val postApiModel = response.body()
-            if (postApiModel != null) {
-                dao.addPost(postApiModel.toDbModel())
+        try {
+            val response = postApi.getPost(id)
+            if (response.isSuccessful) {
+                val postApiModel = response.body()
+                if (postApiModel != null) {
+                    dao.addPost(postApiModel.toDbModel())
+                }
             }
+        } catch (ex: Exception) {
+            Log.e("Repository", "Failed to fetch post from API (id: $id): $ex")
         }
     }
 
     suspend fun getApiPosts() {
         try {
-            val apiPosts = postApi.getPostApiModels()
+            val apiPosts = postApi.getAllPosts()
             val dbPosts = dao.getPostsFlow().first()
             val newApiPosts = apiPosts - dbPosts.toApiModel().toSet()
-            dao.insertAll(newApiPosts.toDbModel())
+            dao.insertAllPosts(newApiPosts.toDbModel())
         } catch (ex: Exception) {
-            Log.e("Repository", "Failed to fetch posts: $ex")
+            Log.e("Repository", "Failed to fetch posts from API: $ex")
         }
     }
 
@@ -53,9 +56,9 @@ class PostRepository @Inject constructor(
 
     private suspend fun getApiUsers(): List<UserApiModel>? {
         return try {
-            postApi.getUserApiModels()
+            postApi.getAllUsers()
         } catch (ex: Exception) {
-            Log.e("Repository", "Failed to fetch users: $ex")
+            Log.e("Repository", "Failed to fetch users from API: $ex")
             null
         }
     }
@@ -70,9 +73,9 @@ class PostRepository @Inject constructor(
 
     suspend fun updatePost(postDbModel: PostDbModel) {
         try {
-            dao.update(postDbModel)
+            dao.updatePost(postDbModel)
         } catch (ex: Exception) {
-            Log.e("Repository", "Failed to update post(${postDbModel.id}): $ex")
+            Log.e("Repository", "Failed to update post(id: ${postDbModel.id}): $ex")
         }
     }
 
@@ -80,7 +83,7 @@ class PostRepository @Inject constructor(
         try {
             dao.addPost(postDbModel)
         } catch (ex: Exception) {
-            Log.e("Repository", "Failed to add post(${postDbModel.id}): $ex")
+            Log.e("Repository", "Failed to add post(id: ${postDbModel.id}): $ex")
         }
     }
 
@@ -92,11 +95,12 @@ class PostRepository @Inject constructor(
         }
     }
 
-    suspend fun getPost(id: Int): PostDomainModel {
-//        try {
-        return dao.getPost(id)!!.toDomainModel()
-//        } catch (ex: Exception) {
-//            Log.e("Repository", "Failed to get post($id): $ex")
-//        }
+    suspend fun getPost(id: Int): PostDomainModel? {
+        return try {
+            dao.getPost(id)!!.toDomainModel()
+        } catch (ex: Exception) {
+            Log.e("Repository", "Failed to get post from db (id: $id): $ex")
+            null
+        }
     }
 }

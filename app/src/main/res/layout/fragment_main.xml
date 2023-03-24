@@ -14,6 +14,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:title="Posts App"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/PopupMenuStyle"
         app:titleTextAppearance="@style/Toolbar.TitleText" />

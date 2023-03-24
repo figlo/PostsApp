@@ -17,7 +17,7 @@ class EditPostViewModel @Inject constructor(
     private val navArgs = EditPostFragmentArgs.fromSavedStateHandle(savedStateHandle)
     private val id = navArgs.id
 
-    var post: PostDomainModel? = null
+    private var post: PostDomainModel? = null
 
     init {
         viewModelScope.launch {
@@ -25,15 +25,11 @@ class EditPostViewModel @Inject constructor(
         }
     }
 
-    suspend fun getPost(): PostDomainModel {
+    suspend fun getPost(): PostDomainModel? {
         return repository.getPost(id)
     }
 
     suspend fun updatePost(post: PostDbModel) {
         repository.updatePost(post)
-    }
-
-    suspend fun deletePost(id: Int) {
-        repository.deletePost(id)
     }
 }

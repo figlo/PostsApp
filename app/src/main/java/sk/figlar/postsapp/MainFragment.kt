@@ -1,20 +1,15 @@
 package sk.figlar.postsapp
 
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +34,8 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
+
+        // setting up recycler view
         val layoutManager = LinearLayoutManager(context)
         binding.rvPosts.layoutManager = layoutManager
         val mDividerItemDecoration = DividerItemDecoration(
@@ -46,39 +43,22 @@ class MainFragment : Fragment() {
             layoutManager.orientation
         )
         binding.rvPosts.addItemDecoration(mDividerItemDecoration)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val navHostFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-
-        val toolbar = binding.toolbar
-        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-        toolbar.setupWithNavController(navController, appBarConfiguration)
-
-        setupMenu()
-
+        // setting up buttons listeners
         setupAddPostButton()
         setupGetApiPostsButton()
         setupDeleteAllPostsButton()
         setupSearchByUserIdButton()
         setupSearchByPostIdButton()
 
-        val deleteCallback: ((postId: Int) -> Unit) = { postId -> deletePost(postId) }
-        val editCallback: ((postId: Int) -> Unit) = { postId -> editPost(postId) }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.postsFlow.collect { posts ->
-                    val adapter = PostAdapter(posts, deleteCallback, editCallback)
-                    binding.rvPosts.adapter = adapter
-                }
-            }
-        }
+        // collecting and displaying data in recycler view
+        setupRecyclerView()
     }
 
     private fun setupAddPostButton() {
@@ -124,6 +104,20 @@ class MainFragment : Fragment() {
         }
     }
 
+    private fun setupRecyclerView(){
+        val deleteCallback: ((postId: Int) -> Unit) = { postId -> onDeletePost(postId) }
+        val editCallback: ((postId: Int) -> Unit) = { postId -> onEditPost(postId) }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.postsFlow.collect { posts ->
+                    val adapter = PostAdapter(posts, deleteCallback, editCallback)
+                    binding.rvPosts.adapter = adapter
+                }
+            }
+        }
+    }
+
     private fun deleteSearchInputs() {
         binding.etSearchByUserId.setText("")
         binding.etSearchByPostId.setText("")
@@ -132,23 +126,11 @@ class MainFragment : Fragment() {
         viewModel.refreshPosts()
     }
 
-    private fun setupMenu() {
-        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.main_menu, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return NavigationUI.onNavDestinationSelected(menuItem, findNavController())
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
-
-    private fun editPost(id: Int) {
+    private fun onEditPost(id: Int) {
         findNavController().navigate(MainFragmentDirections.actionMainFragmentToPostFragment(id))
     }
 
-    private fun deletePost(id: Int) {
+    private fun onDeletePost(id: Int) {
         deleteSearchInputs()
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.deletePost(id)

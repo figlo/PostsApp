@@ -9,16 +9,15 @@ interface PostApi {
     @GET(
         "/posts"
     )
-    suspend fun getPostApiModels(): List<PostApiModel>
+    suspend fun getAllPosts(): List<PostApiModel>
 
     @GET(
         "/posts/{id}"
     )
-//    suspend fun getPost(@Path("id") id: Int): PostApiModel?
     suspend fun getPost(@Path("id") id: Int): Response<PostApiModel>
 
     @GET(
         "/users"
     )
-    suspend fun getUserApiModels(): List<UserApiModel>
+    suspend fun getAllUsers(): List<UserApiModel>
 }

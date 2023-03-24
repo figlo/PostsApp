@@ -31,13 +31,17 @@ class MainViewModel @Inject constructor(
             postRepository.getPostsFlow().collect { postDbModelList ->
                 val posts = postDbModelList.map { it.toDomainModel() }
                 if (mUserId != null) {
+                    // filter based on userId
                     _postsFlow.value = posts.filter { it.userId == mUserId }
                 } else if(mPostId != null) {
                     if (!postRepository.isPostInDb(mPostId!!)) {
+                        // trying to get post from API if not found in local db
                         postRepository.getPostFromApi(mPostId!!)
                     }
+                    // filter based on postId
                     _postsFlow.value = posts.filter { it.id == mPostId }
                 } else {
+                    // no filter
                     _postsFlow.value = posts
                 }
             }

@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    // helper function to handle hiding edittext keyboard
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         val ret = super.dispatchTouchEvent(ev)
         ev?.let { event ->

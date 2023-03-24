@@ -9,9 +9,6 @@ interface PostDao {
     @Query("SELECT * FROM posts ORDER BY id DESC")
     fun getPostsFlow(): Flow<List<PostDbModel>>
 
-    @Query("SELECT * FROM posts ORDER BY id DESC")
-    fun getPostByUserIdFlow(): Flow<List<PostDbModel>>
-
     @Query("SELECT * FROM posts WHERE id = :id")
     suspend fun getPost(id: Int): PostDbModel?
 
@@ -19,13 +16,10 @@ interface PostDao {
     suspend fun addPost(post: PostDbModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(posts: List<PostDbModel>)
+    suspend fun insertAllPosts(posts: List<PostDbModel>)
 
     @Update
-    suspend fun update(post: PostDbModel)
-
-    @Delete
-    suspend fun delete(post: PostDbModel)
+    suspend fun updatePost(post: PostDbModel)
 
     @Query("DELETE FROM posts WHERE id = :id")
     suspend fun deletePost(id: Int)

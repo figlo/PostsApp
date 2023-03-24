@@ -13,8 +13,8 @@ class PostViewHolder(
         with(binding) {
             postId.text = "Id: " + postDomainModel.id.toString()
             postUserId.text = "UserId: " + postDomainModel.userId.toString()
-            postTitle.text = "Title: " + postDomainModel.title.toString()
-            postBody.text = "Body: " + postDomainModel.body.toString()
+            postTitle.text = "Title: " + postDomainModel.title
+            postBody.text = "Body: " + postDomainModel.body
 
             btnPostDelete.setOnClickListener {
                 onDeletePost(postDomainModel.id)

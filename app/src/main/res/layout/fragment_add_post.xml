@@ -16,6 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/PopupMenuStyle"
+        app:title="Add Post"
         app:titleTextAppearance="@style/Toolbar.TitleText" />
 
     <LinearLayout
